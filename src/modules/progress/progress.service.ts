@@ -2,8 +2,8 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Progress } from './progress.entity';
-import { User } from 'src/modules/auth/user.entity';
-import { Topic } from 'src/modules/topics/topic.entity';
+import { User } from '../auth/user.entity';
+import { Topic } from '../topics/topic.entity';
 
 @Injectable()
 export class ProgressService {
@@ -53,11 +53,52 @@ export class ProgressService {
       .where('topic.subjectId = :subjectId', { subjectId })
       .groupBy('progress.userId')
       .select('progress.userId', 'userId')
-      .addSelect('COUNT(progress.id)', "completed_topics") // Fix: Use double quotes
-      .orderBy('"completed_topics"', 'DESC') // Fix: Match alias exactly
+      .addSelect('COUNT(progress.id)', "completed_topics")
+      .orderBy('"completed_topics"', 'DESC') 
       .getRawMany();
 
     return rankings;
    }
+
+   async getSubjectProgress(userId: string, subjectId: string) {
+    const topics = await this.topicRepository.find({
+      where: { subject: { id: subjectId } },
+    });
+
+    if (topics.length === 0) {
+      throw new NotFoundException('No topics found for this subject');
+    }
+
+    const completedProgress = await this.progressRepository.find({
+      where: {
+        user: { id: userId },
+        topic: { subject: { id: subjectId } },
+        isCompleted: true,
+      },
+      relations: ['topic'],
+    });
+
+    const completedTopicIds = new Set(completedProgress.map(progress => progress.topic.id));
+
+    const topicList = topics.map(topic => ({
+      id: topic.id,
+      name: topic.title,
+      isCompleted: completedTopicIds.has(topic.id),
+    }));
+
+
+    const completedTopicsCount = completedTopicIds.size;
+    const totalTopics = topics.length;
+    const completionPercentage = (completedTopicsCount / totalTopics) * 100;
+
+    return {
+      userId,
+      subjectId,
+      completedTopics: completedTopicsCount,
+      totalTopics,
+      completionPercentage: completionPercentage.toFixed(2) + '%',
+      topics: topicList,
+    };
+  }
 
 }

@@ -28,4 +28,10 @@ export class ProgressController {
   getRankings(@Param('subjectId') subjectId: string) {
     return this.progressService.getSubjectRankings(subjectId);
   }
+
+  @Get('track/:subjectId')
+  @RolesAllowed(Roles.LEARNER, Roles.SUPERADMIN)
+  async getSubjectProgress(@Param('subjectId') subjectId: string, @Request() req) {
+    return this.progressService.getSubjectProgress(req.user.id, subjectId);
+  }
 }

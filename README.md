@@ -114,7 +114,7 @@ npm run test:cov
 
 ### 3️⃣ Progress Tracking
 - Tracks **completed topics** per learner.
-- Learner ranking is determined by **percentage completion**.
+- Learners ranking in a subject is determined by number of topics completed by each learners of the subject .
 
 ---
 
@@ -143,7 +143,8 @@ npm run test:cov
 | Method  | Endpoint                  | Description                        | Auth Required |
 |---------|---------------------------|------------------------------------|--------------|
 | `POST`  | `/progress`               | Mark a topic as completed         | Yes          |
-| `GET`   | `/progress/rankings/:courseId`    | Get learner rankings for course  | Yes (Admin)  |
+| `GET`   | `/progress/rankings/:subjectId`    | Get learner rankings for course  | Yes (Admin)  |
+| `GET`   | `/progress/track/:subjectId`    | for learners to track progress | Yes (learner)  |
 
 ---
 
