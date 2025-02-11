@@ -15,7 +15,7 @@ export const dbConfig: DataSourceOptions = {
   port: Number(process.env.DB_PORT) || 5432,
   username: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD || 'postgres',
-  database: process.env.DB_NAME || 'estate-visa',
+  database: process.env.DB_NAME || 'learning-db',
   entities: [User, Topic, Subject, Progress,Role],
   synchronize: false, 
   migrationsTableName: 'migrations',
