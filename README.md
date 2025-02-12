@@ -112,6 +112,8 @@ npm run test:cov
   - **Teacher** → Adds topics and tracks learners.
   - **Learner** → Views courses and tracks progress.
 
+ It is assumed that a super-admin will handle the creation of teacher, learner, or other admin accounts. This implementation can be further enhanced to support bulk imports or self-signup, depending on the specific use case.
+
 ### 3️⃣ Progress Tracking
 - Tracks **completed topics** per learner.
 - Learners ranking in a subject is determined by number of topics completed by each learners of the subject .

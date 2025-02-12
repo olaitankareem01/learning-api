@@ -22,6 +22,7 @@ export const dbConfig: DataSourceOptions = {
   logging: true,
   migrations: [join(__dirname, '..', '/db/migrations', '*.{ts,js}')], 
 };
-console.log(dbConfig)
 const dataSource = new DataSource(dbConfig);
 export default dataSource;
+
+
